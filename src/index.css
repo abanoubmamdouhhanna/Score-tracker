@@ -1,0 +1,294 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Progressive Team Tracker Design System - Vibrant and Modern */
+
+@layer base {
+  :root {
+    /* Modern gradient backgrounds */
+    --background: 225 25% 98%;
+    --background-gradient: linear-gradient(135deg, hsl(225 25% 98%) 0%, hsl(220 20% 96%) 100%);
+    --foreground: 225 15% 15%;
+
+    /* Card system with elevated feel */
+    --card: 0 0% 100%;
+    --card-foreground: 225 15% 15%;
+    --card-shadow: 0 4px 20px -2px hsl(225 25% 25% / 0.08);
+    --card-shadow-hover: 0 8px 32px -4px hsl(225 25% 25% / 0.12);
+
+    /* Modern vibrant primary - blue to purple gradient */
+    --primary: 235 85% 65%;
+    --primary-gradient: linear-gradient(135deg, hsl(235 85% 65%) 0%, hsl(260 85% 70%) 100%);
+    --primary-foreground: 0 0% 100%;
+    --primary-glow: 235 85% 75%;
+
+    /* Warm accent colors for actions */
+    --accent: 20 95% 65%;
+    --accent-gradient: linear-gradient(135deg, hsl(20 95% 65%) 0%, hsl(35 95% 60%) 100%);
+    --accent-foreground: 0 0% 100%;
+    --accent-glow: 20 95% 75%;
+
+    /* Success state for leading team */
+    --success: 142 85% 55%;
+    --success-gradient: linear-gradient(135deg, hsl(142 85% 55%) 0%, hsl(160 85% 60%) 100%);
+    --success-foreground: 0 0% 100%;
+
+    /* Secondary actions */
+    --secondary: 225 25% 95%;
+    --secondary-foreground: 225 15% 25%;
+    --secondary-hover: 225 25% 90%;
+
+    /* Muted elements */
+    --muted: 225 20% 94%;
+    --muted-foreground: 225 15% 45%;
+
+    /* Destructive actions */
+    --destructive: 0 85% 65%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Borders and inputs */
+    --border: 225 20% 88%;
+    --input: 225 20% 96%;
+    --input-focus: 235 85% 65%;
+    --ring: 235 85% 65%;
+
+    /* Enhanced radius system */
+    --radius: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
+
+    /* Animation system */
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    --bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* Typography scale */
+    --font-heading: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "SF Mono", Monaco, "Cascadia Code", monospace;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Dark mode gradient backgrounds */
+    --background: 225 25% 8%;
+    --background-gradient: linear-gradient(135deg, hsl(225 25% 8%) 0%, hsl(220 20% 12%) 100%);
+    --foreground: 225 15% 95%;
+
+    /* Dark mode cards */
+    --card: 225 20% 12%;
+    --card-foreground: 225 15% 95%;
+    --card-shadow: 0 4px 20px -2px hsl(225 50% 5% / 0.4);
+    --card-shadow-hover: 0 8px 32px -4px hsl(225 50% 5% / 0.6);
+
+    /* Dark mode primary */
+    --primary: 235 85% 70%;
+    --primary-gradient: linear-gradient(135deg, hsl(235 85% 70%) 0%, hsl(260 85% 75%) 100%);
+    --primary-foreground: 225 25% 8%;
+    --primary-glow: 235 85% 80%;
+
+    /* Dark mode accent */
+    --accent: 20 95% 70%;
+    --accent-gradient: linear-gradient(135deg, hsl(20 95% 70%) 0%, hsl(35 95% 65%) 100%);
+    --accent-foreground: 225 25% 8%;
+    --accent-glow: 20 95% 80%;
+
+    /* Dark mode success */
+    --success: 142 85% 60%;
+    --success-gradient: linear-gradient(135deg, hsl(142 85% 60%) 0%, hsl(160 85% 65%) 100%);
+    --success-foreground: 225 25% 8%;
+
+    /* Dark mode secondary */
+    --secondary: 225 25% 15%;
+    --secondary-foreground: 225 15% 85%;
+    --secondary-hover: 225 25% 20%;
+
+    /* Dark mode muted */
+    --muted: 225 20% 16%;
+    --muted-foreground: 225 15% 65%;
+
+    /* Dark mode destructive */
+    --destructive: 0 85% 70%;
+    --destructive-foreground: 225 25% 8%;
+
+    /* Dark mode borders */
+    --border: 225 20% 20%;
+    --input: 225 20% 16%;
+    --input-focus: 235 85% 70%;
+    --ring: 235 85% 70%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background: var(--background-gradient);
+    font-family: var(--font-heading);
+  }
+}
+
+@layer components {
+  /* Team card component */
+  .team-card {
+    @apply bg-card text-card-foreground rounded-xl p-6 relative overflow-hidden;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+    border: 1px solid hsl(var(--border));
+  }
+
+  .team-card:hover {
+    box-shadow: var(--card-shadow-hover);
+    transform: translateY(-2px);
+  }
+
+  .team-card.leading {
+    background: var(--success-gradient);
+    @apply text-success-foreground;
+    box-shadow: 0 8px 32px -4px hsl(var(--success) / 0.3);
+  }
+
+  /* Action buttons */
+  .btn-primary {
+    background: var(--primary-gradient);
+    @apply text-primary-foreground px-6 py-3 rounded-lg font-semibold;
+    transition: var(--transition);
+    box-shadow: 0 4px 16px -2px hsl(var(--primary) / 0.3);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px -2px hsl(var(--primary) / 0.4);
+  }
+
+  .btn-accent {
+    background: var(--accent-gradient);
+    @apply text-accent-foreground px-4 py-2 rounded-lg font-medium;
+    transition: var(--transition);
+  }
+
+  .btn-accent:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 16px -2px hsl(var(--accent) / 0.3);
+  }
+
+  /* Specialized button styles */
+  .btn-danger {
+    @apply bg-red-50 hover:bg-red-100 text-red-700 border-red-200 hover:border-red-300;
+    @apply dark:bg-red-950/30 dark:hover:bg-red-950/50 dark:text-red-300 dark:border-red-800 dark:hover:border-red-700;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .btn-danger:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px -1px hsl(0 84% 60% / 0.3);
+  }
+
+  .btn-warning {
+    @apply bg-orange-50 hover:bg-orange-100 text-orange-700 border-orange-200 hover:border-orange-300;
+    @apply dark:bg-orange-950/30 dark:hover:bg-orange-950/50 dark:text-orange-300 dark:border-orange-800 dark:hover:border-orange-700;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .btn-warning:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px -1px hsl(35 91% 60% / 0.3);
+  }
+
+  /* Score display */
+  .score-display {
+    @apply font-mono text-6xl font-bold text-center;
+    font-family: var(--font-mono);
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .team-card.leading .score-display {
+    @apply text-success-foreground;
+    -webkit-text-fill-color: currentColor;
+  }
+
+  /* Input styling */
+  .input-modern {
+    @apply w-full px-4 py-3 rounded-lg border-2 border-border bg-input;
+    transition: var(--transition);
+    font-family: var(--font-heading);
+  }
+
+  .input-modern:focus {
+    @apply outline-none ring-2 ring-ring border-ring;
+    border-color: hsl(var(--input-focus));
+  }
+
+  /* Floating animations */
+  .floating {
+    animation: floating 3s ease-in-out infinite;
+  }
+
+  @keyframes floating {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  /* Pulse glow effect for leading team */
+  .pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% { 
+      box-shadow: 0 8px 32px -4px hsl(var(--success) / 0.3);
+    }
+    50% { 
+      box-shadow: 0 8px 32px -4px hsl(var(--success) / 0.6);
+    }
+  }
+
+  /* Confetti keyframe for celebration */
+  @keyframes confetti-fall {
+    0% {
+      transform: translateY(-100vh) rotate(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) rotate(720deg);
+      opacity: 0;
+    }
+  }
+
+  .confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    pointer-events: none;
+    animation: confetti-fall 3s linear infinite;
+  }
+
+  /* Gradient text utility */
+  .gradient-text {
+    background: var(--primary-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
