@@ -12,15 +12,16 @@ import {
   Minus,
   Undo,
   X,
-  Clock
+  Clock,
+  Award
 } from "lucide-react";
 
 interface GlobalControlBarProps {
   selectedTeamId: string | null;
   onCardPenalty: (teamId: string, cardType: 'yellow' | 'red') => void;
   onClearSelection: () => void;
-  viewMode: 'grid' | 'list';
-  onViewModeChange: (mode: 'grid' | 'list') => void;
+  viewMode: 'grid' | 'list' | 'card';
+  onViewModeChange: (mode: 'grid' | 'list' | 'card') => void;
   gameTime: number;
   isTimerPaused: boolean;
   onTogglePause: () => void;
@@ -148,6 +149,15 @@ export const GlobalControlBar = ({
               >
                 <Grid3X3 className="h-4 w-4" />
                 <span className="hidden sm:inline">Grid</span>
+              </Button>
+              <Button
+                onClick={() => onViewModeChange('card')}
+                variant={viewMode === 'card' ? 'default' : 'ghost'}
+                size="sm"
+                className="gap-2"
+              >
+                <Award className="h-4 w-4" />
+                <span className="hidden sm:inline">Card</span>
               </Button>
               <Button
                 onClick={() => onViewModeChange('list')}

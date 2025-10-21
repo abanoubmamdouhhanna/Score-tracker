@@ -42,8 +42,8 @@ export const TeamTracker = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [loading, setLoading] = useState(true);
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [gameTime, setGameTime] = useState(300); // 5 minutes in seconds for countdown
+  const [viewMode, setViewMode] = useState<'grid' | 'list' | 'card'>('grid');
+  const [gameTime, setGameTime] = useState(10); // 10 seconds default for countdown
   const [currentGameId, setCurrentGameId] = useState<string | null>(null);
   const [gameStartTime, setGameStartTime] = useState<number | null>(null);
   const [isTimerPaused, setIsTimerPaused] = useState(false);
@@ -608,10 +608,10 @@ export const TeamTracker = () => {
   };
 
   const handleResetTimer = () => {
-    setGameTime(300); // Reset to 5 minutes
+    setGameTime(0); // Reset to 0 seconds
     toast({
       title: "Timer Reset",
-      description: "Countdown timer has been reset to 5:00",
+      description: "Countdown timer has been reset to 0:00",
       duration: 2000,
     });
   };
@@ -896,6 +896,8 @@ export const TeamTracker = () => {
           <div className={
             viewMode === 'grid' 
               ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              : viewMode === 'card'
+              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
               : "space-y-4"
           }>
             {teamsToDisplay.map((team, index) => (

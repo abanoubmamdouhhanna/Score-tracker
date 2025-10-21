@@ -1,11 +1,10 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Trophy, Calendar, Clock, Award, Trash2, Download } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import html2canvas from "html2canvas";
 
 interface GameSession {
   id: string;
@@ -110,44 +109,54 @@ export const GameHistory = ({ userId }: { userId: string }) => {
     }
   };
 
-  const handleSaveAsImage = async () => {
-    if (!historyRef.current) return;
-
+  const saveElementAsImage = useCallback(async (element: HTMLElement, filename: string) => {
     try {
       toast({
         title: "Generating image...",
         description: "Please wait while we create your image",
       });
 
+      // Temporarily hide buttons in the element
+      const buttons = element.querySelectorAll('button');
+      buttons.forEach(btn => (btn as HTMLElement).style.display = 'none');
+
       // Get current background color
       const isDark = document.documentElement.classList.contains('dark');
       const bgColor = isDark ? '#1a1a1a' : '#ffffff';
 
-      const canvas = await html2canvas(historyRef.current, {
+      // Dynamically import html2canvas
+      const html2canvas = (await import('html2canvas')).default;
+
+      const canvas = await html2canvas(element, {
         backgroundColor: bgColor,
-        scale: 2,
+        scale: 3, // Higher quality
+        useCORS: true,
+        logging: false,
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight,
       });
 
-      // Convert canvas to blob
+      // Restore buttons
+      buttons.forEach(btn => (btn as HTMLElement).style.display = '');
+
+      // Convert canvas to blob with high quality
       canvas.toBlob((blob) => {
         if (!blob) return;
 
-        // Create download link
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        link.download = `game-history-${format(new Date(), 'yyyy-MM-dd')}.png`;
+        link.download = filename;
         link.href = url;
         link.click();
 
-        // Cleanup
         URL.revokeObjectURL(url);
 
         toast({
           title: "Image saved!",
-          description: "Your game history has been downloaded",
+          description: "Your image has been downloaded",
           duration: 2000,
         });
-      });
+      }, 'image/png', 1.0);
     } catch (error) {
       console.error('Error saving image:', error);
       toast({
@@ -156,6 +165,17 @@ export const GameHistory = ({ userId }: { userId: string }) => {
         variant: "destructive",
       });
     }
+  }, [toast]);
+
+  const handleSaveAsImage = async () => {
+    if (!historyRef.current) return;
+    await saveElementAsImage(historyRef.current, `game-history-${format(new Date(), 'yyyy-MM-dd')}.png`);
+  };
+
+  const handleSaveGameAsImage = async (gameId: string, gameDate: string) => {
+    const gameElement = document.getElementById(`game-${gameId}`);
+    if (!gameElement) return;
+    await saveElementAsImage(gameElement, `game-${format(new Date(gameDate), 'yyyy-MM-dd-HHmm')}.png`);
   };
 
   const formatDuration = (seconds: number) => {
@@ -222,7 +242,8 @@ export const GameHistory = ({ userId }: { userId: string }) => {
         {games.map((game) => (
           <div
             key={game.id}
-            className="border rounded-lg p-4 space-y-3 hover:shadow-md transition-shadow"
+            id={`game-${game.id}`}
+            className="border rounded-lg p-4 space-y-3 hover:shadow-md transition-shadow bg-card"
           >
             {/* Game Info */}
             <div className="flex items-center justify-between text-sm text-muted-foreground">
@@ -236,14 +257,25 @@ export const GameHistory = ({ userId }: { userId: string }) => {
                   {formatDuration(game.total_duration)}
                 </div>
               </div>
-              <Button
-                onClick={() => handleDeleteGame(game.id)}
-                variant="ghost"
-                size="sm"
-                className="text-destructive hover:text-destructive hover:bg-destructive/10"
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => handleSaveGameAsImage(game.id, game.ended_at)}
+                  variant="outline"
+                  size="sm"
+                  className="gap-2"
+                >
+                  <Download className="h-4 w-4" />
+                  Save
+                </Button>
+                <Button
+                  onClick={() => handleDeleteGame(game.id)}
+                  variant="ghost"
+                  size="sm"
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </div>
             </div>
 
             {/* Leaderboard */}
